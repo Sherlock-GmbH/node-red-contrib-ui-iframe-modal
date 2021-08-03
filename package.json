@@ -1,0 +1,33 @@
+{
+	"name": "node-red-contrib-dashboard-iframe-modal",
+	"description": "Use this node to display a given website in iframe overlay.",
+	"keywords": [
+		"dashboard",
+		"node-red",
+		"iframe",
+        "website",
+		"ui"
+	],
+	"version": "0.0.1",
+	"license": "MIT",
+	"author": {
+		"name": "Dirk Dresch",
+		"email": "dirk@sherlock.gmbh"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal/issues"
+	},
+	"homepage": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal#readme",
+	"peerDependencies": {
+		"node-red-dashboard": "^2.23.2"
+	},
+	"node-red": {
+		"nodes": {
+			"ui_iframe_modal": "iframe-modal.js"
+		}
+	}
+}

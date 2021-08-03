@@ -1,0 +1,70 @@
+<script type="text/javascript">
+
+	RED.nodes.registerType( 'ui_iframe_modal', {
+		category: 'Dashboard',
+		paletteLabel: 'iframe-modal',
+		inputs: 1,
+		outputs: 0,
+		color: '#a0e8ff',
+		icon: 'font-awesome/fa-window-restore',
+		align: 'right',
+		defaults: {
+			name: { value: '' },
+			group: { type: 'ui_group', required: true },
+			order: { value: 0 },
+			width: { value: 0, validate: function( width ) {
+				const group = RED.nodes.node( $( '#node-input-group' ).val() || this.group );
+				const valid = !group || +width <= +group.width;
+
+				$( '#node-input-size' ).toggleClass( 'input-error', !valid );
+
+				return valid;
+			} },
+			height: { value: 0 }
+		},
+		label: function() {
+			return this.name || 'iframe-modal';
+		},
+		oneditprepare: () => {
+			$( '#node-input-size' ).elementSizer( {
+				width: "#node-input-width",
+				height: "#node-input-height",
+				group: "#node-input-group"
+			} );
+		}
+	} );
+
+</script>
+
+<script type="text/html" data-template-name="ui_iframe_modal">
+	<div class="form-row">
+		<label for="node-input-name"><i class="fa fa-fw fa-tag"></i> Name</label>
+		<input type="text" id="node-input-name" placeholder="Name" />
+	</div>
+	<br />
+	<div class="form-row" id="template-row-group">
+		<label><i class="fa fa-fw fa-table"></i> Group</label>
+		<input type="text" id="node-input-group" />
+	</div>
+	<div class="form-row" id="template-row-size">
+		<label><i class="fa fa-fw fa-object-group"></i> Size</label>
+		<input type="hidden" id="node-input-width" />
+		<input type="hidden" id="node-input-height" />
+		<button id="node-input-size" class="editor-button"></button>
+	</div>
+</script>
+
+<script type="text/html" data-help-name="ui_iframe_modal">
+	<p style="text-align: justify;">
+		A simple analog clock for the Node-RED Dashboard.
+	</p>
+	<br />
+	<p style="text-align: center;">
+		
+	</p>
+	<br />
+	<p style="text-align: justify;">
+		The time to be displayed is transferred as timestamp (milliseconds since 01.01.1970) in
+		<code>msg.payload</code>. The local time is displayed in the dashboard.
+	</p>
+</script>
