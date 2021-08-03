@@ -17,26 +17,22 @@ module.exports = function(RED) {
 
 		var html = String.raw`
 		<style>
-			.nr-dashboard-ui_iframe_modal { padding:0; }
-			.overlay { position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 10; background-color: rgba(0,0,0,0.5); display: none; text-align: center; padding: 5%; }
-			.visible { display: block; }
-		</style>
-		<div id="${id}-overlay" class="overlay" onclick="event.preventDefault(); document.getElementById('${id}-overlay').classList.remove('visible');">
-			<iframe id="${id}" src="${url}" allow="${allow}" style="width: 60vw; height:50vh; overflow: hidden; border:0; display: inline-block">
-				Failed to load Web page
-			</iframe>
-		</div>
+			.overlay { position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 10; background-color: rgba(0,0,0,0.5); display: block; text-align: center; padding: 5%; }
+		</style>		
 		<script>
 			(function(scope) {
-				var iframe = document.getElementById("${id}");
-				var overlay = document.getElementById("${id}-overlay");
-
 				scope.$watch("msg", function(msg) {
-					if (iframe && msg) {
-						if (msg.url) {
-							iframe.setAttribute("src", msg.url);
-							overlay.classList.add("visible");
-						}
+					if (msg && msg.url) {							
+						// build iframe html
+						var frameHtml = '<div class="overlay" onclick="document.body.removeChild(document.getElementById(\'${id}-overlay\'))">';
+						frameHtml += '<iframe id="${id}" src="' + msg.url + '" allow="${allow}" style="width: 60vw; height:50vh; overflow: hidden; border:0; display: inline-block">';
+						frameHtml += 'Failed to load Web page';
+						frameHtml += '</iframe></div>';
+						// add it to document body
+						var frameDiv = document.createElement("div");
+						frameDiv.id = "${id}-overlay";
+						frameDiv.innerHTML = frameHtml;
+						document.body.appendChild(frameDiv);
 					}
 				});
 			})(scope);
@@ -70,8 +66,8 @@ module.exports = function(RED) {
 					node: node,                             // *REQUIRED* !!DO NOT EDIT!!
 					order: config.order,                    // *REQUIRED* !!DO NOT EDIT!!
 					group: config.group,                    // *REQUIRED* !!DO NOT EDIT!!
-					width: 0, //config.width,                    // *REQUIRED* !!DO NOT EDIT!!
-					height: 0, //config.height,                  // *REQUIRED* !!DO NOT EDIT!!
+					width: config.width,                    // *REQUIRED* !!DO NOT EDIT!!
+					height: config.height,                  // *REQUIRED* !!DO NOT EDIT!!
 					format: html,                           // *REQUIRED* !!DO NOT EDIT!!
 					templateScope: "local",                 // *REQUIRED* !!DO NOT EDIT!!
 					emitOnlyNewValues: false,               // *REQUIRED* Edit this if you would like your node to only emit new values.
