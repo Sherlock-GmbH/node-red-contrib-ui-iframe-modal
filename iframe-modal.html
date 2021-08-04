@@ -20,7 +20,10 @@
 
 				return valid;
 			} },
-			height: { value: -1 }
+			height: { value: -1 },
+			iframeWidth: { value: 50},
+			iframeHeight: { value: 50},
+			url: {value: ''}
 		},
 		label: function() {
 			return this.name || 'iframe-modal';
@@ -41,20 +44,26 @@
 	<div class="form-row" id="template-row-group">
 		<label><i class="fa fa-fw fa-table"></i> Group</label>
 		<input type="text" id="node-input-group" />
+	</div>
+	<div class="form-row">
+		<label><i class="fa fa-fw fa-bookmark"></i>URL</label>
+		<input type="text" id="node-input-url" />
+	</div>
+	<div class="form-row">
+		<label><i class="fa fa-fw fa-window-maximize"></i>Width (vw)</label>
+		<input type="text" id="node-input-iframeWidth" />
+	</div>
+	<div class="form-row">
+		<label><i class="fa fa-fw fa-window-maximize"></i>Height (vh)</label>
+		<input type="text" id="node-input-iframeHeight" />
 	</div>	
 </script>
 
 <script type="text/html" data-help-name="ui_iframe_modal">
 	<p style="text-align: justify;">
-		A simple analog clock for the Node-RED Dashboard.
+		A iFrame overlay for the Node-RED Dashboard.
 	</p>
-	<br />
-	<p style="text-align: center;">
-		
-	</p>
-	<br />
 	<p style="text-align: justify;">
-		The time to be displayed is transferred as timestamp (milliseconds since 01.01.1970) in
-		<code>msg.payload</code>. The local time is displayed in the dashboard.
+		<code>msg.url</code>. The source parameter of the iFrame.
 	</p>
 </script>

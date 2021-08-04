@@ -7,13 +7,15 @@ module.exports = function(RED) {
 		count++;
 		
 		var id = "nr-db-ifm" + count;
-		var url = config.url ? config.url : "";
+		var url = (config.url && config.url !== "") ? config.url : "not-set";
 		var allow = "autoplay";
 		var origin = config.origin ? config.origin : "*";
 		var scale = config.scale;
 		if (!scale || (scale === "")) {
 			scale = 100;
 		}
+		var iframeWidth = (config.iframeWidth !== '') ? config.iframeWidth : 50;
+		var iframeHeight = (config.iframeHeight !== '') ? config.iframeHeight : 50;
 
 		var html = String.raw`
 		<style>
@@ -22,18 +24,29 @@ module.exports = function(RED) {
 		<script>
 			(function(scope) {
 				scope.$watch("msg", function(msg) {
-					if (msg && msg.url) {							
-						// build iframe html
-						var frameHtml = '<div class="overlay" onclick="document.body.removeChild(document.getElementById(\'${id}-overlay\'))">';
-						frameHtml += '<iframe id="${id}" src="' + msg.url + '" allow="${allow}" style="width: 60vw; height:50vh; overflow: hidden; border:0; display: inline-block">';
-						frameHtml += 'Failed to load Web page';
-						frameHtml += '</iframe></div>';
-						// add it to document body
-						var frameDiv = document.createElement("div");
-						frameDiv.id = "${id}-overlay";
-						frameDiv.innerHTML = frameHtml;
-						document.body.appendChild(frameDiv);
+					// prioritize msg before config
+					var frameUrl = 'not-set';
+					frameUrl = (msg && msg.url) ? msg.url : '${url}';					
+					
+					// only build iframe if we have a valid URL
+					if (frameUrl === 'not-set' || frameUrl === '') { return; }
+
+					window.closeIframeModal = function() {
+						document.body.removeChild(document.getElementById('${id}-overlay')); 
+						scope.send({payload: '', url: ''});
 					}
+
+					// build iframe html
+					var frameHtml = '<div class="overlay" onclick="closeIframeModal()">';
+					frameHtml += '<iframe id="${id}" src="' + frameUrl + '" allow="${allow}" style="width: ${iframeWidth}vw; height: ${iframeHeight}vh; overflow: hidden; border:0; display: inline-block">';
+					frameHtml += 'Failed to load Web page';
+					frameHtml += '</iframe></div>';
+					
+					// add html to document body
+					var frameDiv = document.createElement("div");
+					frameDiv.id = "${id}-overlay";
+					frameDiv.innerHTML = frameHtml;
+					document.body.appendChild(frameDiv);										
 				});
 			})(scope);
 		</script>
@@ -72,11 +85,7 @@ module.exports = function(RED) {
 					templateScope: "local",                 // *REQUIRED* !!DO NOT EDIT!!
 					emitOnlyNewValues: false,               // *REQUIRED* Edit this if you would like your node to only emit new values.
 					forwardInputMessages: false,            // *REQUIRED* Edit this if you would like your node to forward the input message to it's ouput.
-					storeFrontEndInputAsState: false,       // *REQUIRED* If the widgect accepts user input - should it update the backend stored state ?
-
-					convertBack: function (value) {
-						return value;
-					},
+					storeFrontEndInputAsState: true,       // *REQUIRED* If the widgect accepts user input - should it update the backend stored state ?
 
 					beforeEmit: function(msg, value) {
 						return { msg: msg };
@@ -89,30 +98,13 @@ module.exports = function(RED) {
 					},
 
 					initController: function($scope, events) {
-						//debugger;
-
 						$scope.flag = true;   // not sure if this is needed?
 
 						$scope.init = function (config) {
 							$scope.config = config;
-							$scope.textContent = config.textLabel;
-						};
-
-						$scope.$watch('msg', function(msg) {
-							if (!msg) { return; } // Ignore undefined msg
-							$scope.textContent = msg.payload;
-						});
-	
-						$scope.change = function() {
-							// The data will be stored in the model on the scope
-							$scope.send({payload: $scope.textContent});
-						};
-
-						$scope.enterkey = function(keyEvent){
-							if (keyEvent.which === 13) {
-								$scope.send({payload: $scope.textContent});
-							}
 						};	
+
+						
 					}
 				});
 			}
