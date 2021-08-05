@@ -20,14 +20,17 @@ module.exports = function(RED) {
 		var html = String.raw`
 		<style>
 			.overlay { position: fixed; top: 0; left: 0; height: 100%; width: 100%; z-index: 10; background-color: rgba(0,0,0,0.5); display: block; text-align: center; padding: 5%; }
-		</style>		
+			.overlay div.container { background-color: white; border: 6px solid var(--nr-dashboard-pageTitlebarBackgroundColor); display: inline-block; }
+			.overlay div.container iframe { overflow: hidden; border: 0; display: none; }
+			.overlay div.container div.loading { padding: 10%; }
+		</style>
 		<script>
 			(function(scope) {
 				scope.$watch("msg", function(msg) {
 					// prioritize msg before config
 					var frameUrl = 'not-set';
 					frameUrl = (msg && msg.url) ? msg.url : '${url}';					
-					
+
 					// only build iframe if we have a valid URL
 					if (frameUrl === 'not-set' || frameUrl === '') { return; }
 
@@ -38,15 +41,23 @@ module.exports = function(RED) {
 
 					// build iframe html
 					var frameHtml = '<div class="overlay" onclick="closeIframeModal()">';
-					frameHtml += '<iframe id="${id}" src="' + frameUrl + '" allow="${allow}" style="width: ${iframeWidth}vw; height: ${iframeHeight}vh; overflow: hidden; border:0; display: inline-block">';
+					frameHtml += '<div class="container" style="width: ${iframeWidth}vw; height: ${iframeHeight}vh;"><div class="loading" id="${id}-loading"><i class="fa fa-spinner fa-spin"></i></div>';
+					frameHtml += '<iframe id="${id}" src="' + frameUrl + '" allow="${allow}" style="width: ${iframeWidth}vw; height: ${iframeHeight}vh;">';
 					frameHtml += 'Failed to load Web page';
-					frameHtml += '</iframe></div>';
-					
+					frameHtml += '</iframe></div></div>';
+
 					// add html to document body
 					var frameDiv = document.createElement("div");
 					frameDiv.id = "${id}-overlay";
 					frameDiv.innerHTML = frameHtml;
-					document.body.appendChild(frameDiv);										
+					document.body.appendChild(frameDiv);
+								
+					// add loading handler
+					var iframeElem = document.getElementById('${id}');
+					iframeElem.addEventListener('load', function() {
+					    document.getElementById('${id}-loading').style.display = 'none';
+						iframeElem.style.display = 'block';
+					});
 				});
 			})(scope);
 		</script>
