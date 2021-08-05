@@ -1,5 +1,5 @@
 {
-	"name": "node-red-contrib-dashboard-iframe-modal",
+	"name": "node-red-contrib-ui-iframe-modal",
 	"description": "Use this node to display a given website in iframe overlay.",
 	"keywords": [
 		"dashboard",
@@ -16,12 +16,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal.git"
+		"url": "git+https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal.git"
 	},
 	"bugs": {
-		"url": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal/issues"
+		"url": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal/issues"
 	},
-	"homepage": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-iframe-modal#readme",
+	"homepage": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal#readme",
 	"peerDependencies": {
 		"node-red-dashboard": "^2.23.2"
 	},
