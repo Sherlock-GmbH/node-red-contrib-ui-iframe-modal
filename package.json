@@ -16,12 +16,12 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal.git"
+		"url": "git+https://github.com/Sherlock-GmbH/node-red-contrib-ui-iframe-modal.git"
 	},
 	"bugs": {
-		"url": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal/issues"
+		"url": "https://github.com/Sherlock-GmbH/node-red-contrib-ui-iframe-modal/issues"
 	},
-	"homepage": "https://github.com/Sherlock-GmbH/node-red-contrib-dashboard-ui-modal#readme",
+	"homepage": "https://github.com/Sherlock-GmbH/node-red-contrib-ui-iframe-modal#readme",
 	"peerDependencies": {
 		"node-red-dashboard": "^2.23.2"
 	},
