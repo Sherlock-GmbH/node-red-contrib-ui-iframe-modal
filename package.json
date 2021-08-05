@@ -1,5 +1,5 @@
 {
-	"name": "node-red-contrib-ui-iframe-modal",
+	"name": "@sherlock-gmbh/node-red-contrib-ui-iframe-modal",
 	"description": "Use this node to display a given website in iframe overlay.",
 	"keywords": [
 		"dashboard",
